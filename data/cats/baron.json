@@ -1,0 +1,11 @@
+{
+  "id": "baron",
+  "name": "Барон",
+  "sex": "м",
+  "age": "4 года",
+  "color": "дымчатый голубой",
+  "motherId": "iris",
+  "fatherId": "dym",
+  "hasPage": true,
+  "current": true
+}
