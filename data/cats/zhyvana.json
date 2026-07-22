@@ -1,0 +1,12 @@
+{
+  "id": "zhyvana",
+  "name": "Живана",
+  "sex": "ж",
+  "age": "2 года",
+  "color": "рыжая",
+  "motherId": "iris",
+  "fatherId": "dym",
+  "hasPage": true,
+  "current": true,
+  "photos": ["1.png", "2.png", "3.png"]
+}
