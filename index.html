@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Питомник «Полынь»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F6F3EC;
+    --paper-alt: #EEE9DC;
+    --ink: #211F1B;
+    --ink-soft: #625D52;
+    --line: #DCD5C4;
+    --marmalade: #B5652A;
+    --marmalade-soft: #F0DFCF;
+    --sage: #6E7C63;
+    --sage-soft: #E3E7D9;
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  ::selection{background:var(--marmalade-soft);}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--marmalade);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 24px 96px;
+  }
+
+  /* header */
+  header.site{
+    padding:40px 24px 28px;
+    max-width:920px;
+    margin:0 auto;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .brand-mark{
+    width:44px;height:44px;flex:none;
+  }
+  .brand-text h1{
+    font-family:'Fraunces',serif;
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:28px;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .brand-text p{
+    margin:2px 0 0;
+    font-size:13px;
+    color:var(--ink-soft);
+    letter-spacing:0.01em;
+  }
+  nav.tabs{
+    display:flex;
+    gap:4px;
+    background:var(--paper-alt);
+    padding:4px;
+    border-radius:999px;
+  }
+  nav.tabs button{
+    border:none;
+    background:transparent;
+    padding:9px 18px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:500;
+    color:var(--ink-soft);
+    transition:background 0.2s, color 0.2s;
+  }
+  nav.tabs button.active{
+    background:var(--ink);
+    color:var(--paper);
+  }
+
+  /* view fade */
+  .view{animation:fadeIn 0.35s ease both;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  /* catalog */
+  .catalog-head{
+    padding:36px 0 8px;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .catalog-head h2{
+    font-family:'Fraunces',serif;
+    font-size:22px;
+    font-weight:600;
+    margin:0;
+  }
+  .catalog-head .count{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:16px;
+    padding-top:20px;
+  }
+  @media (max-width:720px){
+    .grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:460px){
+    .grid{grid-template-columns:1fr;}
+  }
+  .card{
+    background:var(--paper-alt);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+    display:block;
+    transition:transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    border-color:var(--marmalade);
+    box-shadow:0 8px 22px -12px rgba(33,31,27,0.28);
+  }
+  .card .avatar-row{
+    display:flex;
+    justify-content:center;
+    padding:6px 0 14px;
+  }
+  .card h3{
+    font-family:'Fraunces',serif;
+    font-size:18px;
+    font-weight:600;
+    margin:0 0 6px;
+    text-align:center;
+  }
+  .meta-row{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.02em;
+    padding:3px 9px;
+    border-radius:999px;
+    background:var(--sage-soft);
+    color:var(--sage);
+    white-space:nowrap;
+  }
+  .tag.sex-m{background:#E4EAF0;color:#4D6580;}
+  .tag.sex-f{background:#F2E2E7;color:#9C4C63;}
+
+  /* detail */
+  .back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:28px;
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    background:var(--paper-alt);
+    padding:8px 14px 8px 10px;
+    border-radius:999px;
+    transition:border-color 0.18s, color 0.18s;
+  }
+  .back-btn:hover{border-color:var(--marmalade); color:var(--marmalade);}
+
+  .detail-hero{
+    display:flex;
+    gap:28px;
+    align-items:center;
+    padding:30px 0 8px;
+    flex-wrap:wrap;
+  }
+  .detail-hero .avatar-big{flex:none;}
+  .detail-hero h2{
+    font-family:'Fraunces',serif;
+    font-size:34px;
+    font-weight:600;
+    margin:0 0 8px;
+  }
+  .detail-hero .subtitle{
+    color:var(--ink-soft);
+    font-size:14px;
+    margin:0;
+  }
+
+  .facts{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    margin-top:26px;
+  }
+  @media (max-width:640px){ .facts{grid-template-columns:repeat(2,1fr);} }
+  .fact{
+    background:var(--paper);
+    padding:16px 18px;
+  }
+  .fact .label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 6px;
+  }
+  .fact .value{
+    font-size:15px;
+    font-weight:500;
+    margin:0;
+  }
+  .fact .value a{color:var(--marmalade); border-bottom:1px solid var(--marmalade-soft);}
+  .fact .value a:hover{border-bottom-color:var(--marmalade);}
+
+  section.block{margin-top:44px;}
+  section.block h3{
+    font-family:'Fraunces',serif;
+    font-size:20px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  section.block .hint{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+  }
+
+  /* pedigree tree */
+  .tree{
+    font-size:14px;
+  }
+  .tree-node{
+    position:relative;
+    margin:0;
+    padding:0;
+    list-style:none;
+  }
+  .tree-node .card-line{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    background:var(--paper-alt);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 14px 8px 10px;
+    margin:6px 0;
+  }
+  .tree-node .card-line.self{
+    border-color:var(--marmalade);
+    background:var(--marmalade-soft);
+  }
+  .tree-node .role{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink-soft);
+    width:52px;
+    flex:none;
+  }
+  .tree-node .name{font-weight:600;}
+  .tree-node .name a{color:var(--ink); border-bottom:1px solid var(--marmalade);}
+  .tree-node .name.unlinked{color:var(--ink-soft); font-weight:500;}
+  .tree-node .swatch{
+    width:9px;height:9px;border-radius:50%;flex:none;
+  }
+  .tree-children{
+    list-style:none;
+    margin:0;
+    padding-left:26px;
+    border-left:1px solid var(--line);
+  }
+  .tree-node > .tree-children{margin-top:2px;}
+
+  .unknown-note{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-style:italic;
+    padding:10px 0 0 2px;
+  }
+
+  /* descendants grid */
+  .desc-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+  }
+  @media (max-width:640px){ .desc-grid{grid-template-columns:repeat(2,1fr);} }
+  .desc-card{
+    background:var(--paper-alt);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:border-color 0.18s;
+  }
+  .desc-card:hover{border-color:var(--marmalade);}
+  .desc-card .name{font-weight:600; font-size:13.5px;}
+  .desc-card .sub{font-size:11.5px; color:var(--ink-soft);}
+
+  footer.site{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    padding:60px 24px 0;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
+      <circle cx="22" cy="22" r="21" fill="var(--sage-soft)" stroke="var(--sage)" stroke-width="1"/>
+      <path d="M14 17 L17 11 L20 17 Z" fill="var(--sage)"/>
+      <path d="M24 17 L27 11 L30 17 Z" fill="var(--sage)"/>
+      <ellipse cx="22" cy="23" rx="8.5" ry="7.5" fill="var(--sage)"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Питомник «Полынь»</h1>
+      <p>Британская короткошёрстная · родословные с 2019 года</p>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="active" type="button">Питомник</button>
+  </nav>
+</header>
+
+<div class="wrap" id="app"></div>
+
+<footer class="site">Черновой прототип сайта — можно менять состав, тексты и разделы.</footer>
+
+<script>
+const COLORS = {
+  'дымчатый голубой': '#7C8798',
+  'кремовый': '#E8D3AC',
+  'чёрный': '#2B2A28',
+  'рыжий': '#C9793B',
+  'черепаховый': null // special: split pattern
+};
+
+const cats = [
+  // foundation ancestors — no own page
+  { id:'dym',   name:'Дым',   sex:'м', age:null, color:'дымчатый голубой', motherId:null, fatherId:null, hasPage:false, current:false },
+  { id:'iris',  name:'Ирис',  sex:'ж', age:null, color:'кремовый',          motherId:null, fatherId:null, hasPage:false, current:false },
+  { id:'grom',  name:'Гром',  sex:'м', age:null, color:'чёрный',            motherId:null, fatherId:null, hasPage:false, current:false },
+  { id:'verba', name:'Верба', sex:'ж', age:null, color:'дымчатый голубой', motherId:null, fatherId:null, hasPage:false, current:false },
+
+  // parent generation — current, have pages
+  { id:'baron', name:'Барон', sex:'м', age:'4 года',  color:'дымчатый голубой', motherId:'iris', fatherId:'dym',  hasPage:true, current:true },
+  { id:'marfa', name:'Марфа', sex:'ж', age:'4 года',  color:'черепаховый',      motherId:'verba', fatherId:'grom', hasPage:true, current:true },
+
+  // kittens — current, have pages
+  { id:'dymka',  name:'Дымка',  sex:'ж', age:'8 месяцев', color:'дымчатый голубой', motherId:'marfa', fatherId:'baron', hasPage:true, current:true },
+  { id:'sazha',  name:'Сажа',   sex:'м', age:'8 месяцев', color:'чёрный',           motherId:'marfa', fatherId:'baron', hasPage:true, current:true },
+  { id:'ugolek', name:'Уголёк', sex:'м', age:'8 месяцев', color:'чёрный',           motherId:'marfa', fatherId:'baron', hasPage:true, current:true },
+
+  // unrelated current cat, unknown pedigree
+  { id:'persik', name:'Персик', sex:'м', age:'2 года', color:'рыжий', motherId:null, fatherId:null, hasPage:true, current:true, unknownPedigree:true },
+];
+
+function getCat(id){ return cats.find(c => c.id === id); }
+function currentCats(){ return cats.filter(c => c.current); }
+function childrenOf(id){ return cats.filter(c => c.motherId === id || c.fatherId === id); }
+
+function swatch(color){
+  if(color === 'черепаховый'){
+    return `<span class="swatch" style="background:linear-gradient(135deg, #2B2A28 50%, #C9793B 50%)"></span>`;
+  }
+  return `<span class="swatch" style="background:${COLORS[color] || '#999'}"></span>`;
+}
+
+function avatar(cat, size){
+  const c = cat.color === 'черепаховый' ? '#2B2A28' : (COLORS[cat.color] || '#999');
+  const c2 = cat.color === 'черепаховый' ? '#C9793B' : c;
+  const s = size;
+  return `
+  <svg width="${s}" height="${s}" viewBox="0 0 100 100" fill="none">
+    <path d="M22 34 L30 12 L40 30 Z" fill="${c}"/>
+    <path d="M78 34 L70 12 L60 30 Z" fill="${c2}"/>
+    <ellipse cx="50" cy="56" rx="34" ry="30" fill="${c}"/>
+    ${cat.color === 'черепаховый' ? `<path d="M50 26 Q75 30 84 56 Q80 86 50 86 Z" fill="${c2}" opacity="0.85"/>` : ''}
+    <circle cx="39" cy="52" r="4" fill="var(--paper)"/>
+    <circle cx="61" cy="52" r="4" fill="var(--paper)"/>
+    <path d="M46 66 Q50 70 54 66" stroke="var(--paper)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function sexTag(sex){
+  return `<span class="tag ${sex === 'м' ? 'sex-m' : 'sex-f'}">${sex === 'м' ? 'кот' : 'кошка'}</span>`;
+}
+
+function parentLink(id){
+  if(!id) return null;
+  const p = getCat(id);
+  if(!p) return null;
+  return p;
+}
+
+function renderCatalog(){
+  const list = currentCats();
+  return `
+  <div class="view">
+    <div class="catalog-head">
+      <h2>Котики на данный момент</h2>
+      <span class="count">${list.length} в питомнике</span>
+    </div>
+    <div class="grid">
+      ${list.map(cat => `
+        <a class="card" href="#" data-cat="${cat.id}">
+          <div class="avatar-row">${avatar(cat, 68)}</div>
+          <h3>${cat.name}</h3>
+          <div class="meta-row">
+            ${sexTag(cat.sex)}
+            <span class="tag">${cat.age}</span>
+          </div>
+          <div class="meta-row" style="margin-top:6px;">
+            <span class="tag" style="display:inline-flex;align-items:center;gap:5px;">${swatch(cat.color)}${cat.color}</span>
+          </div>
+        </a>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function buildAncestorNode(cat, role){
+  if(!cat){
+    return `<li class="tree-node"><div class="card-line"><span class="role">${role}</span><span class="name unlinked">неизвестно</span></div></li>`;
+  }
+  const mother = parentLink(cat.motherId);
+  const father = parentLink(cat.fatherId);
+  const hasParents = mother || father;
+  return `
+    <li class="tree-node">
+      <div class="card-line">
+        <span class="role">${role}</span>
+        ${swatch(cat.color)}
+        <span class="name ${cat.hasPage ? '' : 'unlinked'}">
+          ${cat.hasPage ? `<a href="#" data-cat="${cat.id}">${cat.name}</a>` : cat.name}
+        </span>
+      </div>
+      ${hasParents ? `
+        <ul class="tree-children">
+          ${buildAncestorNode(father, 'отец')}
+          ${buildAncestorNode(mother, 'мать')}
+        </ul>` : ''}
+    </li>`;
+}
+
+function renderDetail(id){
+  const cat = getCat(id);
+  const mother = parentLink(cat.motherId);
+  const father = parentLink(cat.fatherId);
+  const kids = childrenOf(cat.id).filter(c => c.current);
+
+  const pedigreeHTML = cat.unknownPedigree
+    ? `<p class="unknown-note">Родословная неизвестна — ${cat.name} найден котёнком и попал в питомник без документов.</p>`
+    : `<ul class="tree" style="list-style:none;padding:0;margin:0;">
+        <li class="tree-node">
+          <div class="card-line self">${swatch(cat.color)}<span class="name">${cat.name}</span></div>
+          <ul class="tree-children">
+            ${buildAncestorNode(father, 'отец')}
+            ${buildAncestorNode(mother, 'мать')}
+          </ul>
+        </li>
+      </ul>`;
+
+  return `
+  <div class="view">
+    <a class="back-btn" href="#" data-back="1">← Питомник</a>
+    <div class="detail-hero">
+      <div class="avatar-big">${avatar(cat, 100)}</div>
+      <div>
+        <h2>${cat.name}</h2>
+        <p class="subtitle">${cat.sex === 'м' ? 'Кот' : 'Кошка'} · ${cat.color}</p>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><p class="label">Пол</p><p class="value">${cat.sex === 'м' ? 'Кот' : 'Кошка'}</p></div>
+      <div class="fact"><p class="label">Возраст</p><p class="value">${cat.age}</p></div>
+      <div class="fact"><p class="label">Окрас</p><p class="value">${cat.color}</p></div>
+      <div class="fact"><p class="label">Родители</p><p class="value">
+        ${father ? (father.hasPage ? `<a href="#" data-cat="${father.id}">${father.name}</a>` : father.name) : '—'}
+        ${mother ? ` / ${mother.hasPage ? `<a href="#" data-cat="${mother.id}">${mother.name}</a>` : mother.name}` : (father ? '' : '')}
+        ${!father && !mother ? 'неизвестны' : ''}
+      </p></div>
+    </div>
+
+    <section class="block">
+      <h3>Родословная</h3>
+      <p class="hint">Клик по имени открывает страницу кота, если она есть в питомнике.</p>
+      ${pedigreeHTML}
+    </section>
+
+    ${kids.length ? `
+    <section class="block">
+      <h3>Потомки</h3>
+      <p class="hint">Котята ${cat.name}, которые сейчас есть в питомнике.</p>
+      <div class="desc-grid">
+        ${kids.map(k => `
+          <a class="desc-card" href="#" data-cat="${k.id}">
+            ${avatar(k, 40)}
+            <div>
+              <div class="name">${k.name}</div>
+              <div class="sub">${k.age}</div>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+    </section>` : ''}
+  </div>`;
+}
+
+function render(){
+  const hash = location.hash;
+  const app = document.getElementById('app');
+  if(hash.startsWith('#cat=')){
+    const id = hash.replace('#cat=', '');
+    app.innerHTML = renderDetail(id);
+  } else {
+    app.innerHTML = renderCatalog();
+  }
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+document.getElementById('app').addEventListener('click', (e) => {
+  const catLink = e.target.closest('[data-cat]');
+  const backLink = e.target.closest('[data-back]');
+  if(catLink){
+    e.preventDefault();
+    location.hash = '#cat=' + catLink.getAttribute('data-cat');
+  } else if(backLink){
+    e.preventDefault();
+    location.hash = '';
+  }
+});
+window.addEventListener('hashchange', render);
+render();
+</script>
+</body>
+</html>
