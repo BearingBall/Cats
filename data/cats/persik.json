@@ -1,0 +1,12 @@
+{
+  "id": "persik",
+  "name": "Персик",
+  "sex": "м",
+  "age": "2 года",
+  "color": "рыжий",
+  "motherId": null,
+  "fatherId": null,
+  "hasPage": true,
+  "current": true,
+  "unknownPedigree": true
+}
