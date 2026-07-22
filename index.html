@@ -466,6 +466,37 @@
     .lightbox{padding:16px;}
     .lightbox-nav{width:40px;height:40px;font-size:18px;}
   }
+
+  /* about / contacts pages */
+  .page-text{
+    padding:40px 0 40px;
+    max-width:620px;
+  }
+  .page-text h2{
+    font-family:'Fraunces',serif;
+    font-size:28px;
+    font-weight:600;
+    margin:0 0 18px;
+  }
+  .page-text p{
+    font-size:15px;
+    line-height:1.75;
+    color:var(--ink-soft);
+    margin:0 0 14px;
+  }
+  .page-text .joke-card{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:15px;
+    color:var(--ink);
+    font-weight:500;
+    background:var(--paper-alt);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 22px;
+    margin-top:6px;
+  }
 </style>
 </head>
 <body>
@@ -484,7 +515,9 @@
     </div>
   </div>
   <nav class="tabs">
-    <button class="active" type="button">Питомник</button>
+    <button data-nav="catalog" class="active" type="button">Сейчас в питомнике</button>
+    <button data-nav="about" type="button">О нас</button>
+    <button data-nav="contacts" type="button">Контакты</button>
   </nav>
 </header>
 
@@ -681,17 +714,61 @@ function renderDetail(id){
   </div>`;
 }
 
-function render(){
+function renderAbout(){
+  return `
+  <div class="view page-text">
+    <h2>О питомнике</h2>
+    <p>Питомник «Полынь» занимается разведением британских короткошёрстных кошек с 2019 года. Мы небольшое семейное хозяйство: у нас нет конвейера — только несколько проверенных линий, за которыми мы наблюдаем не первый год.</p>
+    <p>Каждый котёнок растёт в доме, а не в вольере, с рождения привыкает к людям и получает всё необходимое ветеринарное сопровождение. Мы ведём родословные и стараемся, чтобы будущие хозяева могли увидеть, откуда у котёнка характер и окрас.</p>
+    <p>На этом сайте можно посмотреть, кто сейчас живёт в питомнике, и изучить родословную каждого кота — вплоть до его предков и потомков, если они тоже здесь выросли.</p>
+  </div>`;
+}
+
+function renderContacts(){
+  return `
+  <div class="view page-text">
+    <h2>Контакты</h2>
+    <div class="joke-card">🙈 Пока с нами нельзя поконтактировать.</div>
+  </div>`;
+}
+
+function getView(){
   const hash = location.hash;
+  if(hash.startsWith('#cat=')) return { type:'detail', id: hash.replace('#cat=', '') };
+  if(hash === '#about') return { type:'about' };
+  if(hash === '#contacts') return { type:'contacts' };
+  return { type:'catalog' };
+}
+
+function updateNavActive(view){
+  const activeKey = view.type === 'detail' ? 'catalog' : view.type;
+  document.querySelectorAll('nav.tabs button').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-nav') === activeKey);
+  });
+}
+
+function render(){
+  const view = getView();
   const app = document.getElementById('app');
-  if(hash.startsWith('#cat=')){
-    const id = hash.replace('#cat=', '');
-    app.innerHTML = renderDetail(id);
+  if(view.type === 'detail'){
+    app.innerHTML = renderDetail(view.id);
+  } else if(view.type === 'about'){
+    app.innerHTML = renderAbout();
+  } else if(view.type === 'contacts'){
+    app.innerHTML = renderContacts();
   } else {
     app.innerHTML = renderCatalog();
   }
+  updateNavActive(view);
   window.scrollTo({top:0, behavior:'instant'});
 }
+
+document.querySelector('nav.tabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-nav]');
+  if(!btn) return;
+  const key = btn.getAttribute('data-nav');
+  location.hash = key === 'catalog' ? '' : '#' + key;
+});
 
 document.getElementById('app').addEventListener('click', (e) => {
   const thumbBtn = e.target.closest('[data-thumb]');
