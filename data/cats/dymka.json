@@ -1,0 +1,11 @@
+{
+  "id": "dymka",
+  "name": "Дымка",
+  "sex": "ж",
+  "age": "8 месяцев",
+  "color": "дымчатый голубой",
+  "motherId": "marfa",
+  "fatherId": "baron",
+  "hasPage": true,
+  "current": true
+}
