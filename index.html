@@ -385,25 +385,10 @@ const COLORS = {
   'черепаховый': null // special: split pattern
 };
 
-const cats = [
-  // foundation ancestors — no own page
-  { id:'dym',   name:'Дым',   sex:'м', age:null, color:'дымчатый голубой', motherId:null, fatherId:null, hasPage:false, current:false },
-  { id:'iris',  name:'Ирис',  sex:'ж', age:null, color:'кремовый',          motherId:null, fatherId:null, hasPage:false, current:false },
-  { id:'grom',  name:'Гром',  sex:'м', age:null, color:'чёрный',            motherId:null, fatherId:null, hasPage:false, current:false },
-  { id:'verba', name:'Верба', sex:'ж', age:null, color:'дымчатый голубой', motherId:null, fatherId:null, hasPage:false, current:false },
-
-  // parent generation — current, have pages
-  { id:'baron', name:'Барон', sex:'м', age:'4 года',  color:'дымчатый голубой', motherId:'iris', fatherId:'dym',  hasPage:true, current:true },
-  { id:'marfa', name:'Марфа', sex:'ж', age:'4 года',  color:'черепаховый',      motherId:'verba', fatherId:'grom', hasPage:true, current:true },
-
-  // kittens — current, have pages
-  { id:'dymka',  name:'Дымка',  sex:'ж', age:'8 месяцев', color:'дымчатый голубой', motherId:'marfa', fatherId:'baron', hasPage:true, current:true },
-  { id:'sazha',  name:'Сажа',   sex:'м', age:'8 месяцев', color:'чёрный',           motherId:'marfa', fatherId:'baron', hasPage:true, current:true },
-  { id:'ugolek', name:'Уголёк', sex:'м', age:'8 месяцев', color:'чёрный',           motherId:'marfa', fatherId:'baron', hasPage:true, current:true },
-
-  // unrelated current cat, unknown pedigree
-  { id:'persik', name:'Персик', sex:'м', age:'2 года', color:'рыжий', motherId:null, fatherId:null, hasPage:true, current:true, unknownPedigree:true },
-];
+// Данные больше не хранятся в коде — каждый котик лежит в своём файле
+// data/cats/<id>.json, а data/cats/index.json перечисляет все id.
+// Чтобы добавить котика: создайте новый файл в data/cats/ и впишите его id в index.json.
+let cats = [];
 
 function getCat(id){ return cats.find(c => c.id === id); }
 function currentCats(){ return cats.filter(c => c.current); }
@@ -582,7 +567,36 @@ document.getElementById('app').addEventListener('click', (e) => {
   }
 });
 window.addEventListener('hashchange', render);
-render();
+
+async function init(){
+  const app = document.getElementById('app');
+  app.innerHTML = '<p style="padding:60px 0;color:var(--ink-soft);text-align:center;">Загрузка котиков…</p>';
+  try {
+    const idxRes = await fetch('data/cats/index.json');
+    if(!idxRes.ok) throw new Error('index.json недоступен');
+    const ids = await idxRes.json();
+    cats = await Promise.all(ids.map(async id => {
+      const res = await fetch(`data/cats/${id}.json`);
+      if(!res.ok) throw new Error(`data/cats/${id}.json недоступен`);
+      return res.json();
+    }));
+    render();
+  } catch(err){
+    console.error(err);
+    app.innerHTML = `
+      <div style="padding:60px 0;color:var(--ink-soft);max-width:520px;">
+        <p style="font-weight:600;color:var(--ink);margin-bottom:8px;">Не удалось загрузить данные о котиках.</p>
+        <p style="font-size:13px;line-height:1.5;">
+          Если вы открыли этот файл напрямую двойным щелчком (адрес начинается с <code>file://</code>) —
+          браузер блокирует такие запросы из соображений безопасности.
+          Откройте сайт через GitHub Pages, либо запустите локальный сервер в папке с сайтом
+          (например, <code>npx serve</code> или <code>python -m http.server</code>) и зайдите по адресу
+          <code>http://localhost:...</code>.
+        </p>
+      </div>`;
+  }
+}
+init();
 </script>
 </body>
 </html>
