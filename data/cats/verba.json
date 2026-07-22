@@ -1,0 +1,11 @@
+{
+  "id": "verba",
+  "name": "Верба",
+  "sex": "ж",
+  "age": null,
+  "color": "дымчатый голубой",
+  "motherId": null,
+  "fatherId": null,
+  "hasPage": false,
+  "current": false
+}
