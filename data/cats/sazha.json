@@ -1,0 +1,11 @@
+{
+  "id": "sazha",
+  "name": "Сажа",
+  "sex": "м",
+  "age": "8 месяцев",
+  "color": "чёрный",
+  "motherId": "marfa",
+  "fatherId": "baron",
+  "hasPage": true,
+  "current": true
+}
