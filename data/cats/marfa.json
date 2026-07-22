@@ -1,0 +1,11 @@
+{
+  "id": "marfa",
+  "name": "Марфа",
+  "sex": "ж",
+  "age": "4 года",
+  "color": "черепаховый",
+  "motherId": "verba",
+  "fatherId": "grom",
+  "hasPage": true,
+  "current": true
+}
