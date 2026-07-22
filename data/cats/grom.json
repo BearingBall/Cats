@@ -1,0 +1,11 @@
+{
+  "id": "grom",
+  "name": "Гром",
+  "sex": "м",
+  "age": null,
+  "color": "чёрный",
+  "motherId": null,
+  "fatherId": null,
+  "hasPage": false,
+  "current": false
+}
