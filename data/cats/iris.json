@@ -7,5 +7,6 @@
   "motherId": null,
   "fatherId": null,
   "hasPage": false,
-  "current": false
+  "current": false,
+  "photos": []
 }

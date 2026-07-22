@@ -350,6 +350,122 @@
     color:var(--ink-soft);
     padding:60px 24px 0;
   }
+
+  /* photo gallery on detail page */
+  .photo-gallery{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    flex:none;
+  }
+  .photo-main{
+    position:relative;
+    width:140px;
+    height:140px;
+    border-radius:16px;
+    overflow:hidden;
+    background:var(--paper-alt);
+    border:1px solid var(--line);
+    cursor:zoom-in;
+    padding:0;
+  }
+  .photo-main img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform 0.25s ease;
+  }
+  .photo-main:hover img{transform:scale(1.06);}
+  .photo-main::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(transparent 60%, rgba(33,31,27,0.35));
+    opacity:0;
+    transition:opacity 0.2s;
+  }
+  .photo-main:hover::after{opacity:1;}
+  .photo-thumbs{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    max-width:140px;
+  }
+  .thumb{
+    width:32px;
+    height:32px;
+    padding:0;
+    border-radius:8px;
+    overflow:hidden;
+    border:1.5px solid transparent;
+    opacity:0.6;
+    transition:opacity 0.15s, border-color 0.15s;
+    background:none;
+  }
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .thumb:hover{opacity:0.9;}
+  .thumb.active{opacity:1; border-color:var(--marmalade);}
+
+  /* lightbox */
+  .lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(28,26,23,0.94);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:32px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{
+    max-width:min(88vw, 760px);
+    max-height:80vh;
+    border-radius:12px;
+    box-shadow:0 40px 80px -24px rgba(0,0,0,0.55);
+    animation:fadeIn 0.2s ease both;
+  }
+  .lightbox button{
+    position:absolute;
+    border:none;
+    background:rgba(255,255,255,0.08);
+    color:var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.15s;
+  }
+  .lightbox button:hover{background:rgba(255,255,255,0.2);}
+  .lightbox-close{
+    top:20px; right:24px;
+    width:40px; height:40px;
+    border-radius:50%;
+    font-size:18px;
+  }
+  .lightbox-nav{
+    top:50%;
+    transform:translateY(-50%);
+    width:48px; height:48px;
+    border-radius:50%;
+    font-size:22px;
+  }
+  .lightbox-nav.prev{left:16px;}
+  .lightbox-nav.next{right:16px;}
+  .lightbox-counter{
+    position:absolute;
+    bottom:22px;
+    left:50%;
+    transform:translateX(-50%);
+    color:rgba(246,243,236,0.75);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.03em;
+  }
+  @media (max-width:560px){
+    .lightbox{padding:16px;}
+    .lightbox-nav{width:40px;height:40px;font-size:18px;}
+  }
 </style>
 </head>
 <body>
@@ -376,6 +492,14 @@
 
 <footer class="site">Черновой прототип сайта — можно менять состав, тексты и разделы.</footer>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" data-lightbox-close aria-label="Закрыть">✕</button>
+  <button class="lightbox-nav prev" data-lightbox-prev aria-label="Предыдущее фото">‹</button>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-nav next" data-lightbox-next aria-label="Следующее фото">›</button>
+  <div class="lightbox-counter" id="lightbox-counter"></div>
+</div>
+
 <script>
 const COLORS = {
   'дымчатый голубой': '#7C8798',
@@ -388,6 +512,8 @@ const COLORS = {
 // Данные больше не хранятся в коде — каждый котик лежит в своём файле
 // data/cats/<id>.json, а data/cats/index.json перечисляет все id.
 // Чтобы добавить котика: создайте новый файл в data/cats/ и впишите его id в index.json.
+// Поле "photos" — список имён файлов в photos/<id>/, например ["1.jpg","2.jpg"].
+// Если поле пустое или отсутствует — на анкете остаётся схематичная картинка.
 let cats = [];
 
 function getCat(id){ return cats.find(c => c.id === id); }
@@ -496,11 +622,23 @@ function renderDetail(id){
         </li>
       </ul>`;
 
+  const photos = cat.photos || [];
+  const media = photos.length
+    ? `<div class="photo-gallery">
+        <button class="photo-main" data-gallery-open data-photo-cat="${cat.id}" data-photo-index="0">
+          <img src="photos/${cat.id}/${photos[0]}" alt="${cat.name}">
+        </button>
+        ${photos.length > 1 ? `<div class="photo-thumbs">
+          ${photos.map((p, i) => `<button class="thumb ${i === 0 ? 'active' : ''}" data-thumb data-photo-cat="${cat.id}" data-photo-index="${i}"><img src="photos/${cat.id}/${p}" alt=""></button>`).join('')}
+        </div>` : ''}
+      </div>`
+    : `<div class="avatar-big">${avatar(cat, 100)}</div>`;
+
   return `
   <div class="view">
     <a class="back-btn" href="#" data-back="1">← Питомник</a>
     <div class="detail-hero">
-      <div class="avatar-big">${avatar(cat, 100)}</div>
+      ${media}
       <div>
         <h2>${cat.name}</h2>
         <p class="subtitle">${cat.sex === 'м' ? 'Кот' : 'Кошка'} · ${cat.color}</p>
@@ -556,8 +694,30 @@ function render(){
 }
 
 document.getElementById('app').addEventListener('click', (e) => {
+  const thumbBtn = e.target.closest('[data-thumb]');
+  const mainPhoto = e.target.closest('[data-gallery-open]');
   const catLink = e.target.closest('[data-cat]');
   const backLink = e.target.closest('[data-back]');
+
+  if(thumbBtn){
+    e.preventDefault();
+    const catId = thumbBtn.getAttribute('data-photo-cat');
+    const idx = parseInt(thumbBtn.getAttribute('data-photo-index'), 10);
+    const cat = getCat(catId);
+    const main = document.querySelector('.photo-main');
+    main.querySelector('img').src = `photos/${catId}/${cat.photos[idx]}`;
+    main.setAttribute('data-photo-index', idx);
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumbBtn.classList.add('active');
+    return;
+  }
+  if(mainPhoto){
+    e.preventDefault();
+    const catId = mainPhoto.getAttribute('data-photo-cat');
+    const idx = parseInt(mainPhoto.getAttribute('data-photo-index'), 10);
+    openLightbox(catId, idx);
+    return;
+  }
   if(catLink){
     e.preventDefault();
     location.hash = '#cat=' + catLink.getAttribute('data-cat');
@@ -567,6 +727,50 @@ document.getElementById('app').addEventListener('click', (e) => {
   }
 });
 window.addEventListener('hashchange', render);
+
+// --- lightbox (fullscreen photo viewer) ---
+let lightboxCat = null;
+let lightboxIndex = 0;
+
+function openLightbox(catId, index){
+  lightboxCat = getCat(catId);
+  lightboxIndex = index;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+  lightboxCat = null;
+}
+function updateLightbox(){
+  if(!lightboxCat) return;
+  const photos = lightboxCat.photos;
+  lightboxIndex = (lightboxIndex + photos.length) % photos.length;
+  document.getElementById('lightbox-img').src = `photos/${lightboxCat.id}/${photos[lightboxIndex]}`;
+  document.getElementById('lightbox-img').alt = lightboxCat.name;
+  document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${photos.length}`;
+  const showNav = photos.length > 1;
+  document.querySelector('[data-lightbox-prev]').style.display = showNav ? 'flex' : 'none';
+  document.querySelector('[data-lightbox-next]').style.display = showNav ? 'flex' : 'none';
+}
+function navLightbox(delta){
+  lightboxIndex += delta;
+  updateLightbox();
+}
+document.getElementById('lightbox').addEventListener('click', (e) => {
+  if(e.target.closest('[data-lightbox-close]')){ closeLightbox(); return; }
+  if(e.target.closest('[data-lightbox-prev]')){ navLightbox(-1); return; }
+  if(e.target.closest('[data-lightbox-next]')){ navLightbox(1); return; }
+  if(e.target.id === 'lightbox'){ closeLightbox(); }
+});
+document.addEventListener('keydown', (e) => {
+  if(!document.getElementById('lightbox').classList.contains('open')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowLeft') navLightbox(-1);
+  if(e.key === 'ArrowRight') navLightbox(1);
+});
 
 async function init(){
   const app = document.getElementById('app');

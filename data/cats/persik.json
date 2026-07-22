@@ -8,5 +8,6 @@
   "fatherId": null,
   "hasPage": true,
   "current": true,
-  "unknownPedigree": true
+  "unknownPedigree": true,
+  "photos": []
 }
