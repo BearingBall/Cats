@@ -17,6 +17,9 @@
     --marmalade-soft: #F0DFCF;
     --sage: #6E7C63;
     --sage-soft: #E3E7D9;
+    --blush: #C99483;
+    --blush-soft: #F1E1D9;
+    --blush-ink: #93604E;
     --radius: 14px;
   }
   *{box-sizing:border-box;}
@@ -104,6 +107,10 @@
     background:var(--ink);
     color:var(--paper);
   }
+  nav.tabs button:not(.active):hover{
+    background:var(--blush-soft);
+    color:var(--blush-ink);
+  }
 
   /* view fade */
   .view{animation:fadeIn 0.35s ease both;}
@@ -127,8 +134,8 @@
   .catalog-head .count{
     font-family:'IBM Plex Mono',monospace;
     font-size:12px;
-    color:var(--ink-soft);
-    background:var(--paper-alt);
+    color:var(--blush-ink);
+    background:var(--blush-soft);
     padding:4px 10px;
     border-radius:999px;
   }
@@ -497,6 +504,41 @@
     padding:16px 22px;
     margin-top:6px;
   }
+
+  /* status badge (current / former cattery cat) */
+  .badge-status{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.01em;
+    padding:4px 11px;
+    border-radius:999px;
+    white-space:nowrap;
+    display:inline-block;
+  }
+  .badge-status.is-current{background:var(--sage-soft); color:var(--sage);}
+  .badge-status.is-former{background:var(--blush-soft); color:var(--blush-ink);}
+
+  /* decorative bobtail cat illustrations */
+  .page-illustration{
+    flex:none;
+    opacity:0.92;
+  }
+  .page-text-row{
+    display:flex;
+    gap:28px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+  .paw-icon{
+    display:inline-block;
+    vertical-align:middle;
+    margin-right:8px;
+    opacity:0.7;
+  }
+  section.block h3{
+    display:flex;
+    align-items:center;
+  }
 </style>
 </head>
 <body>
@@ -516,6 +558,7 @@
   </div>
   <nav class="tabs">
     <button data-nav="catalog" class="active" type="button">Сейчас в питомнике</button>
+    <button data-nav="archive" type="button">Архив</button>
     <button data-nav="about" type="button">О нас</button>
     <button data-nav="contacts" type="button">Контакты</button>
   </nav>
@@ -578,6 +621,35 @@ function avatar(cat, size){
 
 function sexTag(sex){
   return `<span class="tag ${sex === 'м' ? 'sex-m' : 'sex-f'}">${sex === 'м' ? 'кот' : 'кошка'}</span>`;
+}
+
+// Декоративный силуэт кота в профиль — короткохвостый курильский бобтейл:
+// у него короткий хвост-помпон вместо длинного, это и рисуем.
+function bobtailCat(size, fill){
+  fill = fill || 'var(--sage)';
+  return `
+  <svg width="${size}" height="${size * 0.82}" viewBox="0 0 130 106" fill="none">
+    <ellipse cx="60" cy="76" rx="42" ry="27" fill="${fill}"/>
+    <circle cx="36" cy="42" r="24" fill="${fill}"/>
+    <path d="M20 26 L13 8 L32 22 Z" fill="${fill}"/>
+    <path d="M46 22 L58 6 L52 26 Z" fill="${fill}"/>
+    <ellipse cx="106" cy="70" rx="9" ry="11" fill="${fill}"/>
+    <circle cx="29" cy="44" r="2.4" fill="var(--paper)"/>
+    <circle cx="42" cy="44" r="2.4" fill="var(--paper)"/>
+    <path d="M32 52 Q36 55 40 52" stroke="var(--paper)" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function pawIcon(size, fill){
+  fill = fill || 'var(--blush)';
+  return `
+  <svg class="paw-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}">
+    <ellipse cx="12" cy="16.5" rx="6.2" ry="5.2"/>
+    <ellipse cx="4.8" cy="8.5" rx="2.3" ry="3"/>
+    <ellipse cx="10.2" cy="5" rx="2.3" ry="3"/>
+    <ellipse cx="15.4" cy="5" rx="2.3" ry="3"/>
+    <ellipse cx="20.2" cy="8.5" rx="2.3" ry="3"/>
+  </svg>`;
 }
 
 function parentLink(id){
@@ -675,6 +747,7 @@ function renderDetail(id){
       <div>
         <h2>${cat.name}</h2>
         <p class="subtitle">${cat.sex === 'м' ? 'Кот' : 'Кошка'} · ${cat.color}</p>
+        ${!cat.current ? `<span class="badge-status is-former" style="margin-top:10px;">больше не в питомнике${cat.note ? ' · ' + cat.note : ''}</span>` : ''}
       </div>
     </div>
 
@@ -690,14 +763,14 @@ function renderDetail(id){
     </div>
 
     <section class="block">
-      <h3>Родословная</h3>
+      <h3>${pawIcon(16)}Родословная</h3>
       <p class="hint">Клик по имени открывает страницу кота, если она есть в питомнике.</p>
       ${pedigreeHTML}
     </section>
 
     ${kids.length ? `
     <section class="block">
-      <h3>Потомки</h3>
+      <h3>${pawIcon(16)}Потомки</h3>
       <p class="hint">Котята ${cat.name}, которые сейчас есть в питомнике.</p>
       <div class="desc-grid">
         ${kids.map(k => `
@@ -717,24 +790,63 @@ function renderDetail(id){
 function renderAbout(){
   return `
   <div class="view page-text">
-    <h2>О питомнике</h2>
-    <p>Питомник «Полынь» занимается разведением британских короткошёрстных кошек с 2019 года. Мы небольшое семейное хозяйство: у нас нет конвейера — только несколько проверенных линий, за которыми мы наблюдаем не первый год.</p>
-    <p>Каждый котёнок растёт в доме, а не в вольере, с рождения привыкает к людям и получает всё необходимое ветеринарное сопровождение. Мы ведём родословные и стараемся, чтобы будущие хозяева могли увидеть, откуда у котёнка характер и окрас.</p>
-    <p>На этом сайте можно посмотреть, кто сейчас живёт в питомнике, и изучить родословную каждого кота — вплоть до его предков и потомков, если они тоже здесь выросли.</p>
+    <div class="page-text-row">
+      <div>
+        <h2>О питомнике</h2>
+        <p>Питомник «Полынь» занимается разведением британских короткошёрстных кошек с 2019 года. Мы небольшое семейное хозяйство: у нас нет конвейера — только несколько проверенных линий, за которыми мы наблюдаем не первый год.</p>
+        <p>Каждый котёнок растёт в доме, а не в вольере, с рождения привыкает к людям и получает всё необходимое ветеринарное сопровождение. Мы ведём родословные и стараемся, чтобы будущие хозяева могли увидеть, откуда у котёнка характер и окрас.</p>
+        <p>На этом сайте можно посмотреть, кто сейчас живёт в питомнике, заглянуть в архив всех котиков, которые когда-либо у нас жили, и изучить родословную каждого — вплоть до его предков и потомков.</p>
+      </div>
+      <div class="page-illustration">${bobtailCat(120, 'var(--sage)')}</div>
+    </div>
   </div>`;
 }
 
 function renderContacts(){
   return `
   <div class="view page-text">
-    <h2>Контакты</h2>
-    <div class="joke-card">🙈 Пока с нами нельзя поконтактировать.</div>
+    <div class="page-text-row">
+      <div>
+        <h2>Контакты</h2>
+        <div class="joke-card">🙈 Пока с нами нельзя поконтактировать.</div>
+      </div>
+      <div class="page-illustration">${bobtailCat(110, 'var(--blush)')}</div>
+    </div>
+  </div>`;
+}
+
+function renderArchive(){
+  const list = cats
+    .filter(c => c.hasPage)
+    .sort((a, b) => (b.current === true) - (a.current === true));
+  return `
+  <div class="view">
+    <div class="catalog-head">
+      <h2>${pawIcon(18)}Архив питомника</h2>
+      <span class="count">${list.length} за всё время</span>
+    </div>
+    <div class="grid">
+      ${list.map(cat => `
+        <a class="card" href="#" data-cat="${cat.id}">
+          <div class="avatar-row">${avatar(cat, 68)}</div>
+          <h3>${cat.name}</h3>
+          <div class="meta-row">
+            ${sexTag(cat.sex)}
+            <span class="tag">${cat.age || '—'}</span>
+          </div>
+          <div class="meta-row" style="margin-top:6px;">
+            <span class="badge-status ${cat.current ? 'is-current' : 'is-former'}">${cat.current ? 'сейчас в питомнике' : 'больше не здесь'}</span>
+          </div>
+        </a>
+      `).join('')}
+    </div>
   </div>`;
 }
 
 function getView(){
   const hash = location.hash;
   if(hash.startsWith('#cat=')) return { type:'detail', id: hash.replace('#cat=', '') };
+  if(hash === '#archive') return { type:'archive' };
   if(hash === '#about') return { type:'about' };
   if(hash === '#contacts') return { type:'contacts' };
   return { type:'catalog' };
@@ -752,6 +864,8 @@ function render(){
   const app = document.getElementById('app');
   if(view.type === 'detail'){
     app.innerHTML = renderDetail(view.id);
+  } else if(view.type === 'archive'){
+    app.innerHTML = renderArchive();
   } else if(view.type === 'about'){
     app.innerHTML = renderAbout();
   } else if(view.type === 'contacts'){

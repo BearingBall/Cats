@@ -1,0 +1,13 @@
+{
+  "id": "snezhok",
+  "name": "Снежок",
+  "sex": "м",
+  "age": "5 лет",
+  "color": "кремовый",
+  "motherId": "iris",
+  "fatherId": "dym",
+  "hasPage": true,
+  "current": false,
+  "note": "Уехал в новую семью в 2023 году.",
+  "photos": []
+}
