@@ -5,41 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Питомник «Полынь»</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper: #F6F3EC;
-    --paper-alt: #EEE9DC;
-    --ink: #211F1B;
-    --ink-soft: #625D52;
-    --line: #DCD5C4;
-    --marmalade: #B5652A;
-    --marmalade-soft: #F0DFCF;
+    --paper: #FAF8F4;
+    --paper-alt: #F0ECE5;
+    --ink: #242019;
+    --ink-soft: #57534A;
+    --line: #DFDAD0;
+    --accent: #3F5A66;
+    --accent-hover: #2E4650;
+    --accent-soft: #E4EAEC;
+    --clay: #B98860;
+    --clay-soft: #F1E3D6;
+    --clay-ink: #8A6247;
     --sage: #6E7C63;
     --sage-soft: #E3E7D9;
-    --blush: #C99483;
-    --blush-soft: #F1E1D9;
-    --blush-ink: #93604E;
-    --radius: 14px;
+    --radius-card: 6px;
+    --radius-btn: 3px;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--paper);
-    color:var(--ink);
+    color:var(--ink-soft);
     font-family:'Inter',sans-serif;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
   }
-  ::selection{background:var(--marmalade-soft);}
+  ::selection{background:var(--accent-soft);}
   a{color:inherit;text-decoration:none;}
   button{font-family:inherit;cursor:pointer;}
 
-  /* focus visibility */
   a:focus-visible, button:focus-visible{
-    outline:2px solid var(--marmalade);
+    outline:2px solid var(--accent);
     outline-offset:3px;
-    border-radius:4px;
+    border-radius:2px;
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -47,15 +48,14 @@
   }
 
   .wrap{
-    max-width:920px;
+    max-width:960px;
     margin:0 auto;
     padding:0 24px 96px;
   }
 
-  /* header */
   header.site{
-    padding:40px 24px 28px;
-    max-width:920px;
+    padding:44px 24px 22px;
+    max-width:960px;
     margin:0 auto;
     display:flex;
     align-items:flex-end;
@@ -64,61 +64,50 @@
     flex-wrap:wrap;
     border-bottom:1px solid var(--line);
   }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-  .brand-mark{
-    width:44px;height:44px;flex:none;
-  }
   .brand-text h1{
-    font-family:'Fraunces',serif;
-    font-optical-sizing:auto;
-    font-weight:600;
-    font-size:28px;
+    font-family:'Bodoni Moda',serif;
+    font-weight:500;
+    font-size:30px;
     margin:0;
-    letter-spacing:-0.01em;
+    letter-spacing:-0.005em;
+    color:var(--ink);
   }
   .brand-text p{
-    margin:2px 0 0;
-    font-size:13px;
+    margin:4px 0 0;
+    font-size:11.5px;
     color:var(--ink-soft);
-    letter-spacing:0.01em;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
   }
   nav.tabs{
     display:flex;
-    gap:4px;
-    background:var(--paper-alt);
-    padding:4px;
-    border-radius:999px;
+    gap:30px;
   }
   nav.tabs button{
     border:none;
-    background:transparent;
-    padding:9px 18px;
-    border-radius:999px;
-    font-size:14px;
+    background:none;
+    padding:6px 0;
+    font-size:12.5px;
     font-weight:500;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
     color:var(--ink-soft);
-    transition:background 0.2s, color 0.2s;
+    border-bottom:1px solid transparent;
+    transition:color 0.15s, border-color 0.15s;
   }
   nav.tabs button.active{
-    background:var(--ink);
-    color:var(--paper);
+    color:var(--ink);
+    border-bottom-color:var(--accent);
   }
   nav.tabs button:not(.active):hover{
-    background:var(--blush-soft);
-    color:var(--blush-ink);
+    color:var(--accent);
   }
 
-  /* view fade */
   .view{animation:fadeIn 0.35s ease both;}
   @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
 
-  /* catalog */
   .catalog-head{
-    padding:36px 0 8px;
+    padding:40px 0 8px;
     display:flex;
     align-items:baseline;
     justify-content:space-between;
@@ -126,24 +115,27 @@
     flex-wrap:wrap;
   }
   .catalog-head h2{
-    font-family:'Fraunces',serif;
-    font-size:22px;
-    font-weight:600;
+    font-family:'Bodoni Moda',serif;
+    font-size:24px;
+    font-weight:500;
     margin:0;
+    color:var(--ink);
   }
   .catalog-head .count{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    color:var(--blush-ink);
-    background:var(--blush-soft);
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--clay-ink);
+    background:var(--clay-soft);
     padding:4px 10px;
-    border-radius:999px;
+    border-radius:var(--radius-btn);
   }
   .grid{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
-    gap:16px;
-    padding-top:20px;
+    gap:18px;
+    padding-top:22px;
   }
   @media (max-width:720px){
     .grid{grid-template-columns:repeat(2,1fr);}
@@ -152,79 +144,90 @@
     .grid{grid-template-columns:1fr;}
   }
   .card{
-    background:var(--paper-alt);
+    background:var(--paper);
     border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:18px;
+    border-radius:var(--radius-card);
+    padding:14px;
     display:block;
-    transition:transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
   }
   .card:hover{
-    transform:translateY(-3px);
-    border-color:var(--marmalade);
-    box-shadow:0 8px 22px -12px rgba(33,31,27,0.28);
+    transform:translateY(-2px);
+    box-shadow:0 16px 32px -18px rgba(36,32,25,0.18);
   }
-  .card .avatar-row{
+  .card-photo{
+    width:100%;
+    aspect-ratio:4/5;
+    border-radius:4px;
+    background:var(--paper-alt);
+    overflow:hidden;
     display:flex;
+    align-items:center;
     justify-content:center;
-    padding:6px 0 14px;
   }
+  .card-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform 0.3s ease;
+  }
+  .card:hover .card-photo img{transform:scale(1.03);}
   .card h3{
-    font-family:'Fraunces',serif;
-    font-size:18px;
-    font-weight:600;
-    margin:0 0 6px;
+    font-family:'Bodoni Moda',serif;
+    font-size:17px;
+    font-weight:500;
+    margin:14px 0 8px;
     text-align:center;
+    color:var(--ink);
   }
   .meta-row{
     display:flex;
     justify-content:center;
-    gap:8px;
+    gap:6px;
     flex-wrap:wrap;
   }
   .tag{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:0.02em;
-    padding:3px 9px;
-    border-radius:999px;
+    font-size:10.5px;
+    font-weight:500;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:var(--radius-btn);
     background:var(--sage-soft);
     color:var(--sage);
     white-space:nowrap;
   }
-  .tag.sex-m{background:#E4EAF0;color:#4D6580;}
-  .tag.sex-f{background:#F2E2E7;color:#9C4C63;}
+  .tag.sex-m{background:var(--accent-soft);color:var(--accent);}
+  .tag.sex-f{background:var(--clay-soft);color:var(--clay-ink);}
 
-  /* detail */
   .back-btn{
     display:inline-flex;
     align-items:center;
     gap:6px;
-    margin-top:28px;
-    font-size:13px;
+    margin-top:30px;
+    font-size:12.5px;
     font-weight:500;
+    letter-spacing:0.02em;
     color:var(--ink-soft);
-    border:1px solid var(--line);
-    background:var(--paper-alt);
-    padding:8px 14px 8px 10px;
-    border-radius:999px;
-    transition:border-color 0.18s, color 0.18s;
+    transition:color 0.15s;
   }
-  .back-btn:hover{border-color:var(--marmalade); color:var(--marmalade);}
+  .back-btn:hover{color:var(--accent);}
 
   .detail-hero{
     display:flex;
-    gap:28px;
-    align-items:center;
-    padding:30px 0 8px;
+    gap:30px;
+    align-items:flex-start;
+    padding:32px 0 8px;
     flex-wrap:wrap;
   }
   .detail-hero .avatar-big{flex:none;}
   .detail-hero h2{
-    font-family:'Fraunces',serif;
-    font-size:34px;
-    font-weight:600;
+    font-family:'Bodoni Moda',serif;
+    font-size:36px;
+    font-weight:500;
     margin:0 0 8px;
+    color:var(--ink);
   }
   .detail-hero .subtitle{
     color:var(--ink-soft);
@@ -238,9 +241,9 @@
     gap:1px;
     background:var(--line);
     border:1px solid var(--line);
-    border-radius:var(--radius);
+    border-radius:var(--radius-card);
     overflow:hidden;
-    margin-top:26px;
+    margin-top:28px;
   }
   @media (max-width:640px){ .facts{grid-template-columns:repeat(2,1fr);} }
   .fact{
@@ -248,9 +251,8 @@
     padding:16px 18px;
   }
   .fact .label{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;
-    letter-spacing:0.06em;
+    font-size:10px;
+    letter-spacing:0.07em;
     text-transform:uppercase;
     color:var(--ink-soft);
     margin:0 0 6px;
@@ -259,16 +261,18 @@
     font-size:15px;
     font-weight:500;
     margin:0;
+    color:var(--ink);
   }
-  .fact .value a{color:var(--marmalade); border-bottom:1px solid var(--marmalade-soft);}
-  .fact .value a:hover{border-bottom-color:var(--marmalade);}
+  .fact .value a{color:var(--accent); border-bottom:1px solid var(--accent-soft);}
+  .fact .value a:hover{border-bottom-color:var(--accent);}
 
-  section.block{margin-top:44px;}
+  section.block{margin-top:46px;}
   section.block h3{
-    font-family:'Fraunces',serif;
+    font-family:'Bodoni Moda',serif;
     font-size:20px;
-    font-weight:600;
+    font-weight:500;
     margin:0 0 4px;
+    color:var(--ink);
   }
   section.block .hint{
     font-size:13px;
@@ -276,32 +280,23 @@
     margin:0 0 20px;
   }
 
-  /* pedigree tree */
-  .tree{
-    font-size:14px;
-  }
-  .tree-node{
-    position:relative;
-    margin:0;
-    padding:0;
-    list-style:none;
-  }
+  .tree{font-size:14px;}
+  .tree-node{position:relative;margin:0;padding:0;list-style:none;}
   .tree-node .card-line{
     display:inline-flex;
     align-items:center;
     gap:9px;
     background:var(--paper-alt);
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:var(--radius-btn);
     padding:8px 14px 8px 10px;
     margin:6px 0;
   }
   .tree-node .card-line.self{
-    border-color:var(--marmalade);
-    background:var(--marmalade-soft);
+    border-color:var(--accent);
+    background:var(--accent-soft);
   }
   .tree-node .role{
-    font-family:'IBM Plex Mono',monospace;
     font-size:10px;
     text-transform:uppercase;
     letter-spacing:0.05em;
@@ -309,12 +304,10 @@
     width:52px;
     flex:none;
   }
-  .tree-node .name{font-weight:600;}
-  .tree-node .name a{color:var(--ink); border-bottom:1px solid var(--marmalade);}
+  .tree-node .name{font-weight:600; color:var(--ink);}
+  .tree-node .name a{color:var(--ink); border-bottom:1px solid var(--accent);}
   .tree-node .name.unlinked{color:var(--ink-soft); font-weight:500;}
-  .tree-node .swatch{
-    width:9px;height:9px;border-radius:50%;flex:none;
-  }
+  .tree-node .swatch{width:9px;height:9px;border-radius:50%;flex:none;}
   .tree-children{
     list-style:none;
     margin:0;
@@ -330,25 +323,20 @@
     padding:10px 0 0 2px;
   }
 
-  /* descendants grid */
-  .desc-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-  }
+  .desc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
   @media (max-width:640px){ .desc-grid{grid-template-columns:repeat(2,1fr);} }
   .desc-card{
     background:var(--paper-alt);
     border:1px solid var(--line);
-    border-radius:12px;
+    border-radius:var(--radius-card);
     padding:12px;
     display:flex;
     align-items:center;
     gap:10px;
     transition:border-color 0.18s;
   }
-  .desc-card:hover{border-color:var(--marmalade);}
-  .desc-card .name{font-weight:600; font-size:13.5px;}
+  .desc-card:hover{border-color:var(--accent);}
+  .desc-card .name{font-weight:600; font-size:13.5px; color:var(--ink);}
   .desc-card .sub{font-size:11.5px; color:var(--ink-soft);}
 
   footer.site{
@@ -358,52 +346,24 @@
     padding:60px 24px 0;
   }
 
-  /* photo gallery on detail page */
-  .photo-gallery{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    flex:none;
-  }
+  .photo-gallery{display:flex;flex-direction:column;gap:10px;flex:none;}
   .photo-main{
     position:relative;
-    width:140px;
-    height:140px;
-    border-radius:16px;
+    width:150px;
+    aspect-ratio:4/5;
+    border-radius:var(--radius-card);
     overflow:hidden;
     background:var(--paper-alt);
     border:1px solid var(--line);
     cursor:zoom-in;
     padding:0;
   }
-  .photo-main img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-    transition:transform 0.25s ease;
-  }
-  .photo-main:hover img{transform:scale(1.06);}
-  .photo-main::after{
-    content:'';
-    position:absolute;
-    inset:0;
-    background:linear-gradient(transparent 60%, rgba(33,31,27,0.35));
-    opacity:0;
-    transition:opacity 0.2s;
-  }
-  .photo-main:hover::after{opacity:1;}
-  .photo-thumbs{
-    display:flex;
-    gap:6px;
-    flex-wrap:wrap;
-    max-width:140px;
-  }
+  .photo-main img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s ease;}
+  .photo-main:hover img{transform:scale(1.04);}
+  .photo-thumbs{display:flex;gap:6px;flex-wrap:wrap;max-width:150px;}
   .thumb{
-    width:32px;
-    height:32px;
-    padding:0;
-    border-radius:8px;
+    width:32px;height:32px;padding:0;
+    border-radius:3px;
     overflow:hidden;
     border:1.5px solid transparent;
     opacity:0.6;
@@ -412,85 +372,53 @@
   }
   .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .thumb:hover{opacity:0.9;}
-  .thumb.active{opacity:1; border-color:var(--marmalade);}
+  .thumb.active{opacity:1; border-color:var(--accent);}
 
-  /* lightbox */
   .lightbox{
-    position:fixed;
-    inset:0;
+    position:fixed; inset:0;
     background:rgba(28,26,23,0.94);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:32px;
+    display:none; align-items:center; justify-content:center;
+    z-index:1000; padding:32px;
   }
   .lightbox.open{display:flex;}
   .lightbox img{
     max-width:min(88vw, 760px);
     max-height:80vh;
-    border-radius:12px;
-    box-shadow:0 40px 80px -24px rgba(0,0,0,0.55);
+    border-radius:6px;
+    box-shadow:0 40px 80px -30px rgba(20,18,14,0.45);
     animation:fadeIn 0.2s ease both;
   }
   .lightbox button{
-    position:absolute;
-    border:none;
+    position:absolute; border:none;
     background:rgba(255,255,255,0.08);
     color:var(--paper);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     transition:background 0.15s;
   }
   .lightbox button:hover{background:rgba(255,255,255,0.2);}
-  .lightbox-close{
-    top:20px; right:24px;
-    width:40px; height:40px;
-    border-radius:50%;
-    font-size:18px;
-  }
-  .lightbox-nav{
-    top:50%;
-    transform:translateY(-50%);
-    width:48px; height:48px;
-    border-radius:50%;
-    font-size:22px;
-  }
+  .lightbox-close{top:20px; right:24px; width:40px; height:40px; border-radius:50%; font-size:18px;}
+  .lightbox-nav{top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:50%; font-size:22px;}
   .lightbox-nav.prev{left:16px;}
   .lightbox-nav.next{right:16px;}
   .lightbox-counter{
-    position:absolute;
-    bottom:22px;
-    left:50%;
-    transform:translateX(-50%);
-    color:rgba(246,243,236,0.75);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    letter-spacing:0.03em;
+    position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+    color:rgba(250,248,244,0.75);
+    font-size:12px; letter-spacing:0.03em;
   }
   @media (max-width:560px){
     .lightbox{padding:16px;}
     .lightbox-nav{width:40px;height:40px;font-size:18px;}
   }
 
-  /* about / contacts pages */
-  .page-text{
-    padding:40px 0 40px;
-    max-width:620px;
-  }
+  .page-text{padding:40px 0 40px; max-width:620px;}
   .page-text h2{
-    font-family:'Fraunces',serif;
-    font-size:28px;
-    font-weight:600;
+    font-family:'Bodoni Moda',serif;
+    font-size:30px;
+    font-weight:500;
     margin:0 0 18px;
+    color:var(--ink);
   }
-  .page-text p{
-    font-size:15px;
-    line-height:1.75;
-    color:var(--ink-soft);
-    margin:0 0 14px;
-  }
+  .page-text p{font-size:15px; line-height:1.75; color:var(--ink-soft); margin:0 0 14px;}
   .page-text .joke-card{
     display:inline-flex;
     align-items:center;
@@ -500,61 +428,31 @@
     font-weight:500;
     background:var(--paper-alt);
     border:1px solid var(--line);
-    border-radius:14px;
+    border-radius:var(--radius-card);
     padding:16px 22px;
     margin-top:6px;
   }
 
-  /* status badge (current / former cattery cat) */
   .badge-status{
-    font-family:'IBM Plex Mono',monospace;
     font-size:10.5px;
-    letter-spacing:0.01em;
-    padding:4px 11px;
-    border-radius:999px;
+    font-weight:500;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border-radius:var(--radius-btn);
     white-space:nowrap;
     display:inline-block;
   }
   .badge-status.is-current{background:var(--sage-soft); color:var(--sage);}
-  .badge-status.is-former{background:var(--blush-soft); color:var(--blush-ink);}
-
-  /* decorative bobtail cat illustrations */
-  .page-illustration{
-    flex:none;
-    opacity:0.92;
-  }
-  .page-text-row{
-    display:flex;
-    gap:28px;
-    align-items:flex-start;
-    flex-wrap:wrap;
-  }
-  .paw-icon{
-    display:inline-block;
-    vertical-align:middle;
-    margin-right:8px;
-    opacity:0.7;
-  }
-  section.block h3{
-    display:flex;
-    align-items:center;
-  }
+  .badge-status.is-former{background:var(--clay-soft); color:var(--clay-ink);}
 </style>
 </head>
 <body>
 
 <header class="site">
-  <div class="brand">
-    <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
-      <circle cx="22" cy="22" r="21" fill="var(--sage-soft)" stroke="var(--sage)" stroke-width="1"/>
-      <path d="M14 17 L17 11 L20 17 Z" fill="var(--sage)"/>
-      <path d="M24 17 L27 11 L30 17 Z" fill="var(--sage)"/>
-      <ellipse cx="22" cy="23" rx="8.5" ry="7.5" fill="var(--sage)"/>
-    </svg>
-    <div class="brand-text">
-      <h1>Питомник «Полынь»</h1>
-      <p>Британская короткошёрстная · родословные с 2019 года</p>
-    </div>
+  <div class="brand-text">
+    <h1>Питомник «Полынь»</h1>
+    <p>Британская короткошёрстная · родословные с 2019 года</p>
   </div>
   <nav class="tabs">
     <button data-nav="catalog" class="active" type="button">Сейчас в питомнике</button>
@@ -582,14 +480,9 @@ const COLORS = {
   'кремовый': '#E8D3AC',
   'чёрный': '#2B2A28',
   'рыжий': '#C9793B',
-  'черепаховый': null // special: split pattern
+  'черепаховый': null
 };
 
-// Данные больше не хранятся в коде — каждый котик лежит в своём файле
-// data/cats/<id>.json, а data/cats/index.json перечисляет все id.
-// Чтобы добавить котика: создайте новый файл в data/cats/ и впишите его id в index.json.
-// Поле "photos" — список имён файлов в photos/<id>/, например ["1.jpg","2.jpg"].
-// Если поле пустое или отсутствует — на анкете остаётся схематичная картинка.
 let cats = [];
 
 function getCat(id){ return cats.find(c => c.id === id); }
@@ -623,40 +516,19 @@ function sexTag(sex){
   return `<span class="tag ${sex === 'м' ? 'sex-m' : 'sex-f'}">${sex === 'м' ? 'кот' : 'кошка'}</span>`;
 }
 
-// Декоративный силуэт кота в профиль — короткохвостый курильский бобтейл:
-// у него короткий хвост-помпон вместо длинного, это и рисуем.
-function bobtailCat(size, fill){
-  fill = fill || 'var(--sage)';
-  return `
-  <svg width="${size}" height="${size * 0.82}" viewBox="0 0 130 106" fill="none">
-    <ellipse cx="60" cy="76" rx="42" ry="27" fill="${fill}"/>
-    <circle cx="36" cy="42" r="24" fill="${fill}"/>
-    <path d="M20 26 L13 8 L32 22 Z" fill="${fill}"/>
-    <path d="M46 22 L58 6 L52 26 Z" fill="${fill}"/>
-    <ellipse cx="106" cy="70" rx="9" ry="11" fill="${fill}"/>
-    <circle cx="29" cy="44" r="2.4" fill="var(--paper)"/>
-    <circle cx="42" cy="44" r="2.4" fill="var(--paper)"/>
-    <path d="M32 52 Q36 55 40 52" stroke="var(--paper)" stroke-width="2" fill="none" stroke-linecap="round"/>
-  </svg>`;
-}
-
-function pawIcon(size, fill){
-  fill = fill || 'var(--blush)';
-  return `
-  <svg class="paw-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}">
-    <ellipse cx="12" cy="16.5" rx="6.2" ry="5.2"/>
-    <ellipse cx="4.8" cy="8.5" rx="2.3" ry="3"/>
-    <ellipse cx="10.2" cy="5" rx="2.3" ry="3"/>
-    <ellipse cx="15.4" cy="5" rx="2.3" ry="3"/>
-    <ellipse cx="20.2" cy="8.5" rx="2.3" ry="3"/>
-  </svg>`;
-}
-
 function parentLink(id){
   if(!id) return null;
   const p = getCat(id);
   if(!p) return null;
   return p;
+}
+
+function cardPhoto(cat, size){
+  const photos = cat.photos || [];
+  if(photos.length){
+    return `<div class="card-photo"><img src="photos/${cat.id}/${photos[0]}" alt="${cat.name}"></div>`;
+  }
+  return `<div class="card-photo">${avatar(cat, size)}</div>`;
 }
 
 function renderCatalog(){
@@ -670,7 +542,7 @@ function renderCatalog(){
     <div class="grid">
       ${list.map(cat => `
         <a class="card" href="#" data-cat="${cat.id}">
-          <div class="avatar-row">${avatar(cat, 68)}</div>
+          ${cardPhoto(cat, 68)}
           <h3>${cat.name}</h3>
           <div class="meta-row">
             ${sexTag(cat.sex)}
@@ -737,7 +609,7 @@ function renderDetail(id){
           ${photos.map((p, i) => `<button class="thumb ${i === 0 ? 'active' : ''}" data-thumb data-photo-cat="${cat.id}" data-photo-index="${i}"><img src="photos/${cat.id}/${p}" alt=""></button>`).join('')}
         </div>` : ''}
       </div>`
-    : `<div class="avatar-big">${avatar(cat, 100)}</div>`;
+    : `<div class="card-photo" style="width:150px;">${avatar(cat, 90)}</div>`;
 
   return `
   <div class="view">
@@ -763,14 +635,14 @@ function renderDetail(id){
     </div>
 
     <section class="block">
-      <h3>${pawIcon(16)}Родословная</h3>
+      <h3>Родословная</h3>
       <p class="hint">Клик по имени открывает страницу кота, если она есть в питомнике.</p>
       ${pedigreeHTML}
     </section>
 
     ${kids.length ? `
     <section class="block">
-      <h3>${pawIcon(16)}Потомки</h3>
+      <h3>Потомки</h3>
       <p class="hint">Котята ${cat.name}, которые сейчас есть в питомнике.</p>
       <div class="desc-grid">
         ${kids.map(k => `
@@ -790,28 +662,18 @@ function renderDetail(id){
 function renderAbout(){
   return `
   <div class="view page-text">
-    <div class="page-text-row">
-      <div>
-        <h2>О питомнике</h2>
-        <p>Питомник «Полынь» занимается разведением британских короткошёрстных кошек с 2019 года. Мы небольшое семейное хозяйство: у нас нет конвейера — только несколько проверенных линий, за которыми мы наблюдаем не первый год.</p>
-        <p>Каждый котёнок растёт в доме, а не в вольере, с рождения привыкает к людям и получает всё необходимое ветеринарное сопровождение. Мы ведём родословные и стараемся, чтобы будущие хозяева могли увидеть, откуда у котёнка характер и окрас.</p>
-        <p>На этом сайте можно посмотреть, кто сейчас живёт в питомнике, заглянуть в архив всех котиков, которые когда-либо у нас жили, и изучить родословную каждого — вплоть до его предков и потомков.</p>
-      </div>
-      <div class="page-illustration">${bobtailCat(120, 'var(--sage)')}</div>
-    </div>
+    <h2>О питомнике</h2>
+    <p>Питомник «Полынь» занимается разведением британских короткошёрстных кошек с 2019 года. Мы небольшое семейное хозяйство: у нас нет конвейера — только несколько проверенных линий, за которыми мы наблюдаем не первый год.</p>
+    <p>Каждый котёнок растёт в доме, а не в вольере, с рождения привыкает к людям и получает всё необходимое ветеринарное сопровождение. Мы ведём родословные и стараемся, чтобы будущие хозяева могли увидеть, откуда у котёнка характер и окрас.</p>
+    <p>На этом сайте можно посмотреть, кто сейчас живёт в питомнике, заглянуть в архив всех котиков, которые когда-либо у нас жили, и изучить родословную каждого — вплоть до его предков и потомков.</p>
   </div>`;
 }
 
 function renderContacts(){
   return `
   <div class="view page-text">
-    <div class="page-text-row">
-      <div>
-        <h2>Контакты</h2>
-        <div class="joke-card">🙈 Пока с нами нельзя поконтактировать.</div>
-      </div>
-      <div class="page-illustration">${bobtailCat(110, 'var(--blush)')}</div>
-    </div>
+    <h2>Контакты</h2>
+    <div class="joke-card">Пока с нами нельзя поконтактировать.</div>
   </div>`;
 }
 
@@ -822,13 +684,13 @@ function renderArchive(){
   return `
   <div class="view">
     <div class="catalog-head">
-      <h2>${pawIcon(18)}Архив питомника</h2>
+      <h2>Архив питомника</h2>
       <span class="count">${list.length} за всё время</span>
     </div>
     <div class="grid">
       ${list.map(cat => `
         <a class="card" href="#" data-cat="${cat.id}">
-          <div class="avatar-row">${avatar(cat, 68)}</div>
+          ${cardPhoto(cat, 68)}
           <h3>${cat.name}</h3>
           <div class="meta-row">
             ${sexTag(cat.sex)}
@@ -919,7 +781,6 @@ document.getElementById('app').addEventListener('click', (e) => {
 });
 window.addEventListener('hashchange', render);
 
-// --- lightbox (fullscreen photo viewer) ---
 let lightboxCat = null;
 let lightboxIndex = 0;
 
