@@ -562,6 +562,45 @@
   }
   .badge-status.is-current{background:var(--slate-soft); color:var(--slate);}
   .badge-status.is-former{background:var(--accent-soft); color:var(--accent-ink);}
+
+  /* Home page */
+  .home-section{margin-bottom:48px;}
+  .home-section:last-child{margin-bottom:0;}
+  .home-section h2{
+    font-family:'Fraunces',serif;
+    font-size:28px;
+    font-weight:600;
+    letter-spacing:-0.02em;
+    margin:0 0 16px;
+  }
+  .home-section p{
+    font-size:15px;
+    line-height:1.75;
+    color:var(--ink-soft);
+    margin:0 0 14px;
+    max-width:640px;
+  }
+  .home-divider{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:0 0 48px;
+  }
+  .home-cta{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+  .home-cta a{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    color:var(--accent-ink);
+    border-bottom:1px solid var(--accent-soft);
+    padding-bottom:1px;
+    transition:border-color 0.15s;
+  }
+  .home-cta a:hover{border-bottom-color:var(--accent);}
 </style>
 </head>
 <body>
@@ -572,7 +611,8 @@
     <p>Британская короткошёрстная · родословные с 2019 года</p>
   </div>
   <nav class="tabs">
-    <button data-nav="catalog" class="active" type="button">Сейчас в питомнике</button>
+    <button data-nav="home" class="active" type="button">Главная</button>
+    <button data-nav="current" type="button">Сейчас в питомнике</button>
     <button data-nav="archive" type="button">Архив</button>
     <button data-nav="about" type="button">О нас</button>
     <button data-nav="contacts" type="button">Контакты</button>
@@ -645,7 +685,7 @@ function cardPhoto(cat, size){
   if(photos.length){
     return `<div class="card-photo"><img src="photos/${cat.id}/${photos[0]}" alt="${cat.name}"></div>`;
   }
-  return `<div class="card-photo">${avatar(cat, size)}</div>`;
+  return `<div class="avatar-row">${avatar(cat, size)}</div>`;
 }
 
 function renderCatalog(){
@@ -726,11 +766,11 @@ function renderDetail(id){
           ${photos.map((p, i) => `<button class="thumb ${i === 0 ? 'active' : ''}" data-thumb data-photo-cat="${cat.id}" data-photo-index="${i}"><img src="photos/${cat.id}/${p}" alt=""></button>`).join('')}
         </div>` : ''}
       </div>`
-    : `<div class="card-photo" style="width:150px;">${avatar(cat, 90)}</div>`;
+    : `<div class="avatar-big">${avatar(cat, 90)}</div>`;
 
   return `
   <div class="view">
-    <a class="back-btn" href="#" data-back="1">← Питомник</a>
+    <a class="back-btn" href="#current" data-back="1">← Питомник</a>
     <div class="detail-hero">
       ${media}
       <div>
@@ -773,6 +813,29 @@ function renderDetail(id){
         `).join('')}
       </div>
     </section>` : ''}
+  </div>`;
+}
+
+function renderHome(){
+  return `
+  <div class="view">
+    <div class="home-section" style="padding-top:36px;">
+      <h2>О породе</h2>
+      <p>Британская короткошёрстная — одна из самых узнаваемых пород: плотное, компактное тело, широкая грудь, короткие крепкие лапы и круглая мордочка с полными щеками. Шерсть густая, плюшевая, стоит «плюшевым» слоем — из-за этого порода и получила репутацию «медвежонка».</p>
+      <p>Характер спокойный и независимый, но не отстранённый: британцы привязываются к дому и хозяевам, легко переносят одиночество днём и не требуют повышенной активности — это одна из самых удобных пород для городской квартиры.</p>
+      <p>Уход не сложен: шерсть короткая, но из-за плотного подшёрстка нуждается в регулярном вычёсывании, особенно в период линьки.</p>
+    </div>
+
+    <hr class="home-divider">
+
+    <div class="home-section">
+      <h2>О питомнике</h2>
+      <p>Питомник «Полынь» занимается разведением британских короткошёрстных с 2019 года — небольшое семейное хозяйство, несколько проверенных линий, родословные до третьего колена.</p>
+      <div class="home-cta">
+        <a href="#" data-nav-link="current">Смотреть котиков в питомнике →</a>
+        <a href="#" data-nav-link="about">Подробнее о питомнике →</a>
+      </div>
+    </div>
   </div>`;
 }
 
@@ -825,14 +888,16 @@ function renderArchive(){
 function getView(){
   const hash = location.hash;
   if(hash.startsWith('#cat=')) return { type:'detail', id: hash.replace('#cat=', '') };
+  if(hash === '#current') return { type:'catalog' };
   if(hash === '#archive') return { type:'archive' };
   if(hash === '#about') return { type:'about' };
   if(hash === '#contacts') return { type:'contacts' };
-  return { type:'catalog' };
+  return { type:'home' };
 }
 
 function updateNavActive(view){
-  const activeKey = view.type === 'detail' ? 'catalog' : view.type;
+  const map = { detail:'current', catalog:'current', archive:'archive', about:'about', contacts:'contacts', home:'home' };
+  const activeKey = map[view.type];
   document.querySelectorAll('nav.tabs button').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-nav') === activeKey);
   });
@@ -843,6 +908,8 @@ function render(){
   const app = document.getElementById('app');
   if(view.type === 'detail'){
     app.innerHTML = renderDetail(view.id);
+  } else if(view.type === 'catalog'){
+    app.innerHTML = renderCatalog();
   } else if(view.type === 'archive'){
     app.innerHTML = renderArchive();
   } else if(view.type === 'about'){
@@ -850,7 +917,7 @@ function render(){
   } else if(view.type === 'contacts'){
     app.innerHTML = renderContacts();
   } else {
-    app.innerHTML = renderCatalog();
+    app.innerHTML = renderHome();
   }
   updateNavActive(view);
   window.scrollTo({top:0, behavior:'instant'});
@@ -860,7 +927,7 @@ document.querySelector('nav.tabs').addEventListener('click', (e) => {
   const btn = e.target.closest('[data-nav]');
   if(!btn) return;
   const key = btn.getAttribute('data-nav');
-  location.hash = key === 'catalog' ? '' : '#' + key;
+  location.hash = key === 'home' ? '' : '#' + key;
 });
 
 document.getElementById('app').addEventListener('click', (e) => {
@@ -868,6 +935,7 @@ document.getElementById('app').addEventListener('click', (e) => {
   const mainPhoto = e.target.closest('[data-gallery-open]');
   const catLink = e.target.closest('[data-cat]');
   const backLink = e.target.closest('[data-back]');
+  const navLink = e.target.closest('[data-nav-link]');
 
   if(thumbBtn){
     e.preventDefault();
@@ -888,12 +956,17 @@ document.getElementById('app').addEventListener('click', (e) => {
     openLightbox(catId, idx);
     return;
   }
+  if(navLink){
+    e.preventDefault();
+    location.hash = '#' + navLink.getAttribute('data-nav-link');
+    return;
+  }
   if(catLink){
     e.preventDefault();
     location.hash = '#cat=' + catLink.getAttribute('data-cat');
   } else if(backLink){
     e.preventDefault();
-    location.hash = '';
+    location.hash = '#current';
   }
 });
 window.addEventListener('hashchange', render);
