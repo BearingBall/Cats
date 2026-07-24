@@ -313,3 +313,32 @@ input:focus, select:focus, textarea:focus {
   .card { border-radius: var(--org-radius-sm) !important; }
   .detail-panel, .detail-card { border-radius: var(--org-radius) !important; }
 }
+
+.org-hero {
+  width: 100%;
+  height: clamp(220px, 38vw, 480px);
+  background-image: url('images/hero-organic.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+.org-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(45,36,22,0.08) 0%,
+    rgba(45,36,22,0.0) 40%,
+    rgba(245,240,232,0.85) 100%
+  );
+}
+.org-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 60px;
+  background: var(--org-bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
