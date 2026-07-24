@@ -1,0 +1,9 @@
+﻿{
+  "hero": "hero-organic.jpg",
+  "background": "bg-texture.jpg",
+  "decorations": ["leaf1.png", "leaf2.png", "wave.svg"],
+  "sections": {
+    "about": "about-nature.jpg",
+    "products": ["product1.jpg", "product2.jpg"]
+  }
+}
